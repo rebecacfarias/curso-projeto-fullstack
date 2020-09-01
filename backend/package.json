@@ -11,8 +11,9 @@
   "author": "Rebeca Cunha de Farias",
   "license": "ISC",
   "dependencies": {
+    "date-fns": "^2.16.1",
     "express": "^4.17.1",
-    "mongoose": "^5.10.1"
+    "mongoose": "^5.10.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
