@@ -10,6 +10,8 @@ router.put('/:id',TaskValidation, TaskController.update);
 router.get('/:id', TaskController.show);
 router.delete('/:id', TaskController.delete);
 router.get('/filter/all', MacadressValidation, TaskController.all);
+router.get('/filter/late', MacadressValidation, TaskController.late);
+router.get('/filter/today', MacadressValidation, TaskController.today);
 router.put('/:id/:done', TaskController.done);
 
 module.exports = router;
