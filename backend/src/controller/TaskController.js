@@ -1,6 +1,6 @@
 const TaskModel = require('../model/TaskModel')
 
-const {startOfDay, endOfDay, startOfWeek, lastDayOfWeek} = require('date-fns')
+const {startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear} = require('date-fns')
 
 const current = new Date();
 
@@ -30,7 +30,7 @@ class TaskController{
     }
 
     async all(req, res){
-        await TaskModel.find( { macadress: {'$in': req.body.macadress}  })
+        await TaskModel.find( { macadress: {'$in': req.params.macadress}  })
         .sort('when')
         .then(response => {
             return res.status(200).json(response);
@@ -75,7 +75,7 @@ class TaskController{
     }
 
     async late(req, res){
-        await TaskModel.find({'when': {'$lt': current}, 'macadress': {'$in': req.body.macadress}})
+        await TaskModel.find({'when': {'$lt': current}, 'macadress': {'$in': req.params.macadress}})
         .sort('when')
         .then(response => {
             return res.status(200).json(response) 
@@ -88,7 +88,7 @@ class TaskController{
     async today(req, res){
         await TaskModel
             .find({
-                'macadress': {'$in': req.body.macadress},
+                'macadress': {'$in': req.params.macadress},
                 'when': {'$gte': startOfDay(current), '$lte': endOfDay(current)}
             })
             .sort('when')
@@ -103,8 +103,8 @@ class TaskController{
     async week(req, res){
         await TaskModel
             .find({
-                'macadress': {'$in': req.body.macadress},
-                'when': {'$gte': startOfWeek(current), '$lte': lastDayOfWeek(current)}
+                'macadress': {'$in': req.params.macadress},
+                'when': {'$gte': startOfWeek(current), '$lte': endOfWeek(current)}
             })
             .sort('when')
             .then(response => {
@@ -114,6 +114,37 @@ class TaskController{
                 return res.error(500).json(error)
             })
     }
+
+    async month(req, res){
+        await TaskModel
+            .find({
+                'macadress': {'$in': req.params.macadress},
+                'when': {'$gte': startOfMonth(current), '$lte': endOfMonth(current)}
+            })
+            .sort('when')
+            .then(response => {
+                return res.status(200).json(response)
+            })
+            .catch(error => {
+                return res.error(500).json(error)
+            })
+    }
+
+    async year(req, res){
+        await TaskModel
+            .find({
+                'macadress': {'$in': req.params.macadress},
+                'when': {'$gte': startOfYear(current), '$lte': endOfYear(current)}
+            })
+            .sort('when')
+            .then(response => {
+                return res.status(200).json(response)
+            })
+            .catch(error => {
+                return res.error(500).json(error)
+            })
+    }
+
 
 }
 
